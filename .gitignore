@@ -31,3 +31,4 @@ go.work.sum
 # .idea/
 # .vscode/
 agent/do_not_push/
+agentiq/do_not_push/
