@@ -6,7 +6,8 @@
   - [Introduction](#introduction)
   - [Building Agent: Nightmare dressed as Daydream](#building-agent-nightmare-dressed-as-daydream)
   - [Graph Execution](#graph-execution)
-    - [Graph, Vertex and Pregel](#graph-vertex-and-pregel)
+    - [Philosophies of Graph Exeuction Model](#philosophies-of-graph-exeuction-model)
+  - [Pregel](#pregel)
 - [References](#references)
 
 ## Introduction
@@ -75,7 +76,39 @@ The graph engine is indepepndent of agent. It has no idea on what the agent is, 
 
 So `agentiq` will first focus on building a graph engine. 
 
-### Graph, Vertex and Pregel
+### Philosophies of Graph Exeuction Model
+
+Before we write down the graph engine for the `agentiq`, let us try to contemplate on what is the basic difference from a standard graph engine we need to implement.
+
+In a normal graph engine, we focus on `traversing` which is looping over the nodes and try to achieve the objective that was predefined. A traversal is basically a graph, frontier(current node) and visited set. This causes several issues with agentic graph execution. In an agentic graph execution, we need 
+- parallezation (calling multiple nodes in the same time), 
+- state snapshot (so that in case any nodes crashed, we do not need to start from scratch)
+
+To make this possible, we look into something thats is a different type of graph execution. Instead of traversing, we should focus on converging. What converging actually does here is trying to achieve a state that stopped changing. Consider a spreadsheet with lots of formula. When you chnage any number, every cell recomputes and then since the state of spreadsheet does not change anymore, it achieved all mutation that is needed. It does not traverse.
+
+so putting the comparison of basic graph execution between these two philosophies are the following
+
+|  | Traversal | Convergence |
+| --- | --- | --- |
+| Question asked | "where do I go next" | "did anything changed"|
+| Frontier | A plan | A record |
+| Direction | push - A says run B | pull - B says "I watch A" |
+| Termination | structural : ran out of queues of nodes | semantic : reached a fix point |
+| Re Execution | hazardous | the core mechanism |
+
+If it is not be clear this different philosphies of graph execution, this mechanism of converge is published by google in their `pregel` 
+This is not a tutorial of pregel but we want to assert that pregel's vertex centric graph processing model is extremely apt for agentic graph execution. In next section we will be focusing on very short introduction of `pregel` and how it can be used to create a graph engine for `agentiq`. 
+
+## Pregel
+
+Pregel is model for computing over very large graphs. Its central idea is 
+> Think like a vertex
+
+So instead of writing a program that loops over the graph, you write a function describing what one vertex does when it wakes up. The runtime runs the function for every vertex, in rounds
+
+so the graph computationis is a sequence of `superstep`. each active vertex 
+
+1. Runs `compute(message)` - in parallel, independently of every other vertex
 
 
 
@@ -84,6 +117,8 @@ So `agentiq` will first focus on building a graph engine.
 - [langgraph blog on How to think about agent frameworks](https://www.langchain.com/blog/how-to-think-about-agent-frameworks)
   
 - [How to build effective agent by Anthropic](https://www.anthropic.com/engineering/building-effective-agents)
+
+- [Pregel origial paper](https://15799.courses.cs.cmu.edu/fall2013/static/papers/p135-malewicz.pdf)
 
 
 
