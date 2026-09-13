@@ -1,0 +1,10 @@
+direction: right
+Fixing CVE Workflow {
+Fetch CVE -> Coding Agent: cve details
+Coding Agent -> PR Agent: modified code
+PR Agent -> Decision
+Decision -> Human-approval: is PR OK?
+Decision -> Coding Agent: PR failed on lint
+Human-approval -> PR Agent: Merged command
+}
+

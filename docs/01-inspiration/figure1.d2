@@ -1,0 +1,19 @@
+title: {
+  label: Agent in a box
+  near: bottom-center
+  shape: text
+  style.font-size: 40
+  style.underline: true
+}
+Agent {
+in{
+    shape: oval
+}
+out {
+    shape: oval
+}
+in -> LLM -> out
+Retrieval <-> LLM : query/result
+Tool <-> LLM : Call/Response
+Memory <-> LLM: Read/Write
+}
